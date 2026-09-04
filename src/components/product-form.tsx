@@ -10,7 +10,7 @@ const empty: ProductFormValues = {
   description: "",
   price: "",
   stock: "",
-  category: "Produce",
+  category: "Fresh Vegetables",
   expiryDate: "",
   imageFile: null,
 };
@@ -52,7 +52,7 @@ export function ProductForm({
       return;
     }
     if (needsExpiry && !values.expiryDate) {
-      setError("Meat and dairy products require an expiry date.");
+      setError("Fresh meat, seafood, poultry, and dairy products require an expiry date.");
       return;
     }
 
@@ -127,7 +127,7 @@ export function ProductForm({
           />
           {needsExpiry ? (
             <p className="mt-1 text-xs font-medium text-amber-700">
-              Meat and dairy must show an expiry date to customers.
+              Fresh meat, seafood, poultry, and dairy must show an expiry date to customers.
             </p>
           ) : null}
         </Field>

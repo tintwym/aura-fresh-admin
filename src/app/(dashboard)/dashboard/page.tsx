@@ -198,7 +198,7 @@ export default function DashboardPage() {
           ) : (
             <div className="flex items-start gap-3 rounded-2xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-900">
               <TrendingUp className="mt-0.5 h-4 w-4 shrink-0" />
-              <p>Meat and dairy expiry coverage looks good for the customer app.</p>
+              <p>Fresh meat, seafood, poultry, and dairy expiry coverage looks good for the customer app.</p>
             </div>
           )}
         </>

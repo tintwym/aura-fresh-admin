@@ -52,13 +52,27 @@ export type ProductFormValues = {
   imageFile: File | null;
 };
 
+/** Supermarket-style aisle labels for the admin product form. */
 export const PRODUCT_CATEGORIES = [
-  "Meat",
-  "Dairy",
-  "Produce",
-  "Bakery",
-  "Pantry",
-  "Beverages",
+  "Fresh Fruit",
+  "Fresh Vegetables",
+  "Herbs & Spices",
+  "Poultry",
+  "Seafood",
+  "Fresh Meat",
+  "Dairy & Eggs",
+  "Tofu & Plant Protein",
+  "Bakery & Bread",
+  "Rice & Grains",
+  "Noodles & Pasta",
+  "Pulses & Legumes",
+  "Cooking Oils",
+  "Sauces & Condiments",
+  "Spreads & Sweeteners",
+  "Breakfast & Cereals",
+  "Snacks & Biscuits",
+  "Tea & Coffee",
+  "Soft Drinks & Juices",
   "Other",
 ] as const;
 
@@ -71,18 +85,45 @@ export const ORDER_STATUSES = [
 ] as const;
 
 export function requiresExpiry(category: string, name = "", description = ""): boolean {
-  const hay = `${category} ${name} ${description}`.toLowerCase();
+  const cat = category.toLowerCase();
+  if (
+    cat.includes("poultry") ||
+    cat.includes("seafood") ||
+    cat.includes("fresh meat") ||
+    cat === "meat" ||
+    (cat.includes("meat") && !cat.includes("plant")) ||
+    cat.includes("dairy") ||
+    cat.includes("eggs")
+  ) {
+    return true;
+  }
+
+  // Name heuristics — skip sauces/oils/bakery snacks so "fish sauce" / "butter cookies" stay clean
+  if (
+    cat.includes("sauce") ||
+    cat.includes("condiment") ||
+    cat.includes("oil") ||
+    cat.includes("bakery") ||
+    cat.includes("snack") ||
+    cat.includes("biscuit")
+  ) {
+    return false;
+  }
+
+  const hay = `${name} ${description}`.toLowerCase();
   return (
-    hay.includes("meat") ||
-    hay.includes("dairy") ||
     hay.includes("chicken") ||
     hay.includes("beef") ||
     hay.includes("pork") ||
-    hay.includes("fish") ||
-    hay.includes("milk") ||
+    hay.includes("mutton") ||
+    hay.includes("prawn") ||
+    hay.includes("shrimp") ||
+    /\bfish\b/.test(hay) ||
+    hay.includes("seafood") ||
+    /\bmilk\b/.test(hay) ||
     hay.includes("cheese") ||
     hay.includes("yogurt") ||
-    hay.includes("butter")
+    hay.includes("yoghurt")
   );
 }
 
