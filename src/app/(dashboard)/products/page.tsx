@@ -1,7 +1,8 @@
 "use client";
 
 import Link from "next/link";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useSearchParams } from "next/navigation";
+import { Suspense, useCallback, useEffect, useMemo, useState } from "react";
 import { Plus, Search, Trash2 } from "lucide-react";
 import { deleteProduct, fetchProducts } from "@/lib/api";
 import { formatMmk } from "@/lib/currency";
@@ -9,6 +10,14 @@ import type { Product } from "@/lib/types";
 import { requiresExpiry } from "@/lib/types";
 
 export default function ProductsPage() {
+  return (
+    <Suspense>
+      <ProductsPageContent />
+    </Suspense>
+  );
+}
+
+function ProductsPageContent() {
   const [products, setProducts] = useState<Product[]>([]);
   const [query, setQuery] = useState("");
   const [category, setCategory] = useState("All");
@@ -31,6 +40,11 @@ export default function ProductsPage() {
   useEffect(() => {
     void load();
   }, [load]);
+
+  const searchParam = useSearchParams().get("q");
+  useEffect(() => {
+    if (searchParam !== null) setQuery(searchParam);
+  }, [searchParam]);
 
   const categories = useMemo(() => {
     const set = new Set(

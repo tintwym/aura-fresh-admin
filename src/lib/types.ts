@@ -98,15 +98,10 @@ export function requiresExpiry(category: string, name = "", description = ""): b
     return true;
   }
 
-  // Name heuristics — skip sauces/oils/bakery snacks so "fish sauce" / "butter cookies" stay clean
-  if (
-    cat.includes("sauce") ||
-    cat.includes("condiment") ||
-    cat.includes("oil") ||
-    cat.includes("bakery") ||
-    cat.includes("snack") ||
-    cat.includes("biscuit")
-  ) {
+  // A real aisle decides on its own; keyword guessing is only for uncategorized items, otherwise
+  // "fish sauce" or a juice that mentions "seafood dishes" would get flagged.
+  // Keep in sync with ProductDTO.needsExpiryTag in the iOS app.
+  if (cat.trim() && cat.trim() !== "other") {
     return false;
   }
 
