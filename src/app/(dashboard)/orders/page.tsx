@@ -6,6 +6,7 @@ import { formatMmk } from "@/lib/currency";
 import type { Order } from "@/lib/types";
 import { ORDER_STATUSES, normalizeOrderStatus } from "@/lib/types";
 import { StatusBadge } from "@/components/status-badge";
+import { Select } from "@/components/select";
 
 export default function OrdersPage() {
   const [orders, setOrders] = useState<Order[]>([]);
@@ -60,18 +61,16 @@ export default function OrdersPage() {
             Advance delivery status for customer grocery orders.
           </p>
         </div>
-        <select
-          className="rounded-xl border border-slate-200 bg-white px-3 py-2.5 text-sm outline-none focus:border-emerald-500"
+        <Select
+          className="rounded-xl border border-slate-200 bg-white px-3 py-2.5 text-sm sm:min-w-44"
           value={filter}
-          onChange={(e) => setFilter(e.target.value)}
-        >
-          <option value="ALL">All statuses</option>
-          {ORDER_STATUSES.map((s) => (
-            <option key={s} value={s}>
-              {s.replaceAll("_", " ")}
-            </option>
-          ))}
-        </select>
+          onChange={setFilter}
+          options={[
+            { value: "ALL", label: "All statuses" },
+            ...ORDER_STATUSES.map((s) => ({ value: s, label: s.replaceAll("_", " ") })),
+          ]}
+          aria-label="Filter by status"
+        />
       </div>
 
       {error ? (
@@ -147,21 +146,17 @@ export default function OrdersPage() {
                 </ul>
 
                 <div className="mt-4 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
-                  <label className="flex items-center gap-2 text-xs font-semibold text-slate-500">
+                  <div className="flex items-center gap-2 text-xs font-semibold text-slate-500">
                     Update status
-                    <select
-                      className="rounded-lg border border-slate-200 bg-white px-2.5 py-1.5 text-xs font-semibold text-slate-800 outline-none focus:border-emerald-500"
+                    <Select
+                      className="rounded-lg border border-slate-200 bg-white px-2.5 py-1.5 text-xs font-semibold text-slate-800"
                       value={normalizeOrderStatus(order.status)}
                       disabled={updatingId === order.id}
-                      onChange={(e) => void onStatusChange(order, e.target.value)}
-                    >
-                      {ORDER_STATUSES.map((s) => (
-                        <option key={s} value={s}>
-                          {s.replaceAll("_", " ")}
-                        </option>
-                      ))}
-                    </select>
-                  </label>
+                      onChange={(status) => void onStatusChange(order, status)}
+                      options={ORDER_STATUSES.map((s) => ({ value: s, label: s.replaceAll("_", " ") }))}
+                      aria-label={`Update status for order ${order.id.slice(0, 8).toUpperCase()}`}
+                    />
+                  </div>
                   {updatingId === order.id ? (
                     <span className="text-xs text-slate-500">Saving…</span>
                   ) : null}

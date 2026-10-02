@@ -4,6 +4,7 @@ import { useMemo, useState } from "react";
 import type { ProductFormValues } from "@/lib/types";
 import { PRODUCT_CATEGORIES, requiresExpiry } from "@/lib/types";
 import { cn } from "@/lib/cn";
+import { Select } from "@/components/select";
 
 const empty: ProductFormValues = {
   name: "",
@@ -79,17 +80,12 @@ export function ProductForm({
           />
         </Field>
         <Field label="Category">
-          <select
+          <Select
             className={inputClass}
             value={values.category}
-            onChange={(e) => setValues((v) => ({ ...v, category: e.target.value }))}
-          >
-            {PRODUCT_CATEGORIES.map((c) => (
-              <option key={c} value={c}>
-                {c}
-              </option>
-            ))}
-          </select>
+            onChange={(category) => setValues((v) => ({ ...v, category }))}
+            options={PRODUCT_CATEGORIES.map((c) => ({ value: c, label: c }))}
+          />
         </Field>
         <Field label="Price (MMK / Ks)">
           <input

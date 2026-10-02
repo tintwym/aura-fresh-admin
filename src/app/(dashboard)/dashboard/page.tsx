@@ -25,6 +25,7 @@ import { KpiCard } from "@/components/kpi-card";
 import { StatusBadge } from "@/components/status-badge";
 import { DonutChart } from "@/components/dashboard/donut-chart";
 import { SalesTrendChart } from "@/components/dashboard/sales-trend-chart";
+import { Select } from "@/components/select";
 
 const AVATAR_COLORS = [
   "bg-emerald-100 text-emerald-700",
@@ -242,15 +243,16 @@ export default function DashboardPage() {
                 ) : null
               }
               controls={
-                <select
+                <Select
                   value={range}
-                  onChange={(e) => setRange(e.target.value as "monthly" | "daily")}
-                  className="rounded-lg border border-slate-200 bg-white px-2.5 py-1.5 text-xs font-semibold text-slate-700 outline-none focus:border-emerald-500"
+                  onChange={setRange}
+                  options={[
+                    { value: "monthly", label: "Monthly" },
+                    { value: "daily", label: "Last 30 days" },
+                  ]}
+                  className="rounded-lg border border-slate-200 bg-white px-2.5 py-1.5 text-xs font-semibold text-slate-700"
                   aria-label="Trend range"
-                >
-                  <option value="monthly">Monthly</option>
-                  <option value="daily">Last 30 days</option>
-                </select>
+                />
               }
             >
               <SalesTrendChart data={range === "monthly" ? stats.monthlyTrend : stats.dailyTrend} />

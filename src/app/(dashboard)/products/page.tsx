@@ -8,6 +8,7 @@ import { deleteProduct, fetchProducts } from "@/lib/api";
 import { formatMmk } from "@/lib/currency";
 import type { Product } from "@/lib/types";
 import { requiresExpiry } from "@/lib/types";
+import { Select } from "@/components/select";
 
 export default function ProductsPage() {
   return (
@@ -111,17 +112,13 @@ function ProductsPageContent() {
             onChange={(e) => setQuery(e.target.value)}
           />
         </div>
-        <select
-          className="rounded-xl border border-slate-200 bg-white px-3 py-2.5 text-sm outline-none focus:border-emerald-500"
+        <Select
+          className="rounded-xl border border-slate-200 bg-white px-3 py-2.5 text-sm sm:min-w-48"
           value={category}
-          onChange={(e) => setCategory(e.target.value)}
-        >
-          {categories.map((c) => (
-            <option key={c} value={c}>
-              {c}
-            </option>
-          ))}
-        </select>
+          onChange={setCategory}
+          options={categories.map((c) => ({ value: c, label: c }))}
+          aria-label="Filter by category"
+        />
       </div>
 
       {error ? (
